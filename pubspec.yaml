@@ -1,0 +1,50 @@
+name: flutter_lokasi2
+description: "Lariku - aplikasi pelacak aktivitas lari, sepeda, dan jalan (mirip Strava) untuk tugas Mobile Programming. Tanpa backend: data disimpan di penyimpanan lokal perangkat."
+# Mencegah paket ini diterbitkan ke pub.dev tanpa sengaja.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # Database lokal: localStorage di web, penyimpanan lokal di Android.
+  # Dipakai juga untuk layar Pengaturan.
+  shared_preferences: ^2.5.0
+  # Folder dokumen aplikasi, tempat file cadangan dan file GPX disimpan.
+  path_provider: ^2.1.5
+  # Hash kata sandi (SHA-256).
+  crypto: ^3.0.6
+
+  # State management
+  provider: ^6.1.5
+
+  # Format tanggal dan angka
+  intl: ^0.20.2
+
+  # GPS dan peta (OpenStreetMap)
+  geolocator: ^14.0.0
+  flutter_map: ^8.3.0
+  latlong2: ^0.9.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Aturan lint yang direkomendasikan; diaktifkan di analysis_options.yaml.
+  flutter_lints: ^6.0.0
+
+  # Penyimpanan palsu di memori untuk test/prefs_store_test.dart
+  shared_preferences_platform_interface: ^2.4.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
