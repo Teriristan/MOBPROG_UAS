@@ -19,6 +19,11 @@ class FollowService {
     return _db.watch<Set<String>>(() => _db.followingOf(uid));
   }
 
+  /// Daftar UID yang mengikuti [uid].
+  Stream<Set<String>> watchFollowerIds(String uid) {
+    return _db.watch<Set<String>>(() => _db.followersOf(uid));
+  }
+
   /// Jumlah pengikut [uid].
   Stream<int> watchFollowersCount(String uid) {
     return _db.watch<int>(() => _db.followersCount(uid));
