@@ -163,7 +163,7 @@ class _UserTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          UserAvatar(name: user.displayName, radius: 22),
+          UserAvatar(name: user.displayName, radius: 22, uid: user.uid),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

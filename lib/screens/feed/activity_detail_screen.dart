@@ -274,7 +274,11 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                         ),
                         child: Row(
                           children: [
-                            UserAvatar(name: a.userName, radius: 22),
+                            UserAvatar(
+                              name: a.userName,
+                              radius: 22,
+                              uid: a.userId,
+                            ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
@@ -422,7 +426,11 @@ class _CommentTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserAvatar(name: comment.userName, radius: 16),
+          UserAvatar(
+            name: comment.userName,
+            radius: 16,
+            uid: comment.userId,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

@@ -1,14 +1,26 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import '../core/theme/bootstrap_theme.dart';
+import '../data/local_db.dart';
 
-/// Avatar bulat berisi huruf pertama nama.
-/// Tanpa foto, jadi tidak butuh penyimpanan file.
+/// Avatar bulat. Bila [uid] diberikan dan pengguna itu punya foto profil,
+/// foto ditampilkan. Selain itu, tampil huruf pertama nama.
 class UserAvatar extends StatelessWidget {
-  const UserAvatar({super.key, required this.name, this.radius = 20});
+  const UserAvatar({
+    super.key,
+    required this.name,
+    this.radius = 20,
+    this.uid,
+  });
 
   final String name;
   final double radius;
+
+  /// ID pengguna, untuk mengambil foto profilnya. Boleh kosong.
+  final String? uid;
 
   static const List<Color> _palette = [
     BsColors.primary,
@@ -19,8 +31,45 @@ class UserAvatar extends StatelessWidget {
     BsColors.purple,
   ];
 
+  // Hasil decode disimpan supaya foto tidak di-decode ulang tiap build.
+  static final Map<String, Uint8List> _decoded = <String, Uint8List>{};
+
+  static Uint8List? _decode(String? base64Text) {
+    if (base64Text == null || base64Text.isEmpty) return null;
+    final cached = _decoded[base64Text];
+    if (cached != null) return cached;
+    try {
+      final bytes = base64Decode(base64Text);
+      if (_decoded.length >= 40) _decoded.clear();
+      _decoded[base64Text] = bytes;
+      return bytes;
+    } on FormatException {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final id = uid;
+    if (id == null) return _initials();
+
+    final db = LocalDb.instance;
+    return StreamBuilder<String?>(
+      initialData: db.userById(id)?.photo,
+      stream: db.watch<String?>(() => db.userById(id)?.photo),
+      builder: (context, snap) {
+        final bytes = _decode(snap.data);
+        if (bytes == null) return _initials();
+        return CircleAvatar(
+          radius: radius,
+          backgroundColor: BsColors.secondary,
+          backgroundImage: MemoryImage(bytes),
+        );
+      },
+    );
+  }
+
+  Widget _initials() {
     final trimmed = name.trim();
     final initial = trimmed.isEmpty
         ? '?'

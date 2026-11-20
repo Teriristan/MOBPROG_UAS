@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import '../data/local_db.dart';
 import '../models/app_user.dart';
 
@@ -29,4 +32,12 @@ class UserService {
   }) {
     return _db.updateProfile(uid: uid, displayName: displayName, bio: bio);
   }
+
+  /// Mengganti foto profil dengan [bytes] (gambar JPEG/PNG).
+  Future<void> updatePhoto(String uid, Uint8List bytes) {
+    return _db.setUserPhoto(uid, base64Encode(bytes));
+  }
+
+  /// Menghapus foto profil (kembali ke avatar huruf).
+  Future<void> removePhoto(String uid) => _db.setUserPhoto(uid, null);
 }

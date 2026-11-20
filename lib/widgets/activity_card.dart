@@ -77,7 +77,7 @@ class ActivityCard extends StatelessWidget {
               if (showAuthor) ...[
                 GestureDetector(
                   onTap: () => _openProfile(context),
-                  child: UserAvatar(name: a.userName, radius: 20),
+                  child: UserAvatar(name: a.userName, radius: 20, uid: a.userId),
                 ),
                 const SizedBox(width: 10),
               ],

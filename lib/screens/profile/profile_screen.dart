@@ -13,16 +13,19 @@ import '../../services/activity_service.dart';
 import '../../services/auth_service.dart';
 import '../../services/follow_service.dart';
 import '../../services/user_service.dart';
-import '../../widgets/activity_card.dart';
 import '../../widgets/bs/bs_app_bar.dart';
 import '../../widgets/bs/bs_button.dart';
 import '../../widgets/bs/bs_card.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_view.dart';
+import '../../widgets/profile_highlights.dart';
+import '../../widgets/profile_extras.dart';
+import '../../widgets/profile_photo_editor.dart';
 import '../../widgets/stat_tile.dart';
 import '../../widgets/user_avatar.dart';
 import '../settings/settings_screen.dart';
 import 'edit_profile_screen.dart';
+import 'follow_list_screen.dart';
 
 /// Profil seseorang: nama, bio, pengikut, total, dan daftar aktivitasnya.
 ///
@@ -70,6 +73,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  void _openFollowList({required bool followers}) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            FollowListScreen(uid: widget.uid, followers: followers),
+      ),
+    );
   }
 
   Future<void> _logout() async {
@@ -178,34 +190,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         } else {
           children
             ..add(_buildTotals(items))
-            ..add(const SizedBox(height: 16))
             ..add(
-              Text(
-                'Aktivitas (${items.length})',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
+              ProfileExtras(
+                uid: user.uid,
+                name: user.displayName,
+                items: items,
+                isMe: isMe,
               ),
             )
-            ..add(const SizedBox(height: 8));
-
-          if (items.isEmpty) {
-            children.add(
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
-                child: Text(
-                  'Belum ada aktivitas.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: BsColors.muted),
-                ),
-              ),
-            );
-          } else {
-            for (final a in items) {
-              children.add(ActivityCard(activity: a, showAuthor: false));
-            }
-          }
+            ..add(ProfileHighlights(items: items))
+            ..add(const SizedBox(height: 16))
+            ..add(FilteredActivityList(items: items));
         }
 
         return ListView(padding: const EdgeInsets.all(12), children: children);
@@ -220,7 +215,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.all(18),
       child: Column(
         children: [
-          UserAvatar(name: user.displayName, radius: 40),
+          if (isMe)
+            ProfilePhotoEditor(
+              uid: user.uid,
+              name: user.displayName,
+              radius: 40,
+            )
+          else
+            UserAvatar(name: user.displayName, radius: 40, uid: user.uid),
           const SizedBox(height: 12),
           Text(
             user.displayName,
@@ -244,9 +246,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _CountStat(label: 'Pengikut', stream: _followersStream),
-              const SizedBox(width: 40),
-              _CountStat(label: 'Mengikuti', stream: _followingStream),
+              _CountStat(
+                label: 'Pengikut',
+                stream: _followersStream,
+                onTap: () => _openFollowList(followers: true),
+              ),
+              const SizedBox(width: 8),
+              _CountStat(
+                label: 'Mengikuti',
+                stream: _followingStream,
+                onTap: () => _openFollowList(followers: false),
+              ),
             ],
           ),
           const SizedBox(height: 14),
@@ -280,21 +290,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
       seconds += a.durationS;
     }
 
+    final pace = distance > 0
+        ? ProfileHighlights.formatPace(seconds / (distance / 1000))
+        : '--:--';
+
     return BsCard(
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: StatTile(label: 'Aktivitas', value: '${items.length}'),
+          Row(
+            children: [
+              Expanded(
+                child: StatTile(label: 'Aktivitas', value: '${items.length}'),
+              ),
+              Expanded(
+                child: StatTile(
+                  label: 'Jarak',
+                  value: Fmt.km(distance),
+                  unit: 'km',
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: StatTile(
-              label: 'Jarak',
-              value: Fmt.km(distance),
-              unit: 'km',
-            ),
-          ),
-          Expanded(
-            child: StatTile(label: 'Waktu', value: Fmt.duration(seconds)),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: StatTile(label: 'Waktu', value: Fmt.duration(seconds)),
+              ),
+              Expanded(
+                child: StatTile(label: 'Pace', value: pace, unit: '/km'),
+              ),
+            ],
           ),
         ],
       ),
@@ -330,26 +356,41 @@ class _FollowButton extends StatelessWidget {
 }
 
 class _CountStat extends StatelessWidget {
-  const _CountStat({required this.label, required this.stream});
+  const _CountStat({
+    required this.label,
+    required this.stream,
+    required this.onTap,
+  });
 
   final String label;
   final Stream<int> stream;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<int>(
-      stream: stream,
-      builder: (context, snap) => Column(
-        children: [
-          Text(
-            '${snap.data ?? 0}',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        child: StreamBuilder<int>(
+          stream: stream,
+          builder: (context, snap) => Column(
+            children: [
+              Text(
+                '${snap.data ?? 0}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Text(
+                label,
+                style: const TextStyle(fontSize: 12, color: BsColors.muted),
+              ),
+            ],
           ),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 12, color: BsColors.muted),
-          ),
-        ],
+        ),
       ),
     );
   }

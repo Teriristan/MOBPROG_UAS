@@ -391,6 +391,20 @@ class LocalDb {
     await _commit(<String>{_kUsers, _kActivities, _kComments});
   }
 
+  /// Batas ukuran foto profil (jumlah karakter base64, sekitar 220 KB).
+  static const int maxPhotoChars = 300000;
+
+  /// Mengganti foto profil. [photo] berupa teks base64; null menghapus foto.
+  Future<void> setUserPhoto(String uid, String? photo) async {
+    final user = _users[uid];
+    if (user == null) throw const AppException('Akun tidak ditemukan.');
+    if (photo != null && photo.length > maxPhotoChars) {
+      throw const AppException('Foto terlalu besar. Pilih foto lain.');
+    }
+    _users[uid] = user.copyWith(photo: photo, clearPhoto: photo == null);
+    await _commit(<String>{_kUsers});
+  }
+
   // =====================================================================
   // Aktivitas
 
@@ -560,6 +574,15 @@ class LocalDb {
     return <String>{
       for (final key in _follows)
         if (key.startsWith(prefix)) key.substring(prefix.length),
+    };
+  }
+
+  /// UID yang mengikuti [uid].
+  Set<String> followersOf(String uid) {
+    final suffix = '|$uid';
+    return <String>{
+      for (final key in _follows)
+        if (key.endsWith(suffix)) key.substring(0, key.length - suffix.length),
     };
   }
 
