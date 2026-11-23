@@ -19,6 +19,9 @@ import '../../widgets/stat_tile.dart';
 import '../../widgets/weekly_bar_chart.dart';
 import '../feed/activity_detail_screen.dart';
 import '../settings/settings_screen.dart';
+import '../../models/stats_period.dart';
+import '../../widgets/period_filter_bar.dart';
+import '../../widgets/type_filter_chips.dart';
 
 /// Statistik pribadi: ringkasan minggu ini, grafik 8 minggu, total, dan
 /// riwayat seluruh aktivitas.
@@ -33,6 +36,8 @@ class _StatsScreenState extends State<StatsScreen> {
   final ActivityService _service = ActivityService();
   String? _uid;
   Stream<List<Activity>>? _stream;
+  StatsPeriod _period = StatsPeriod.all;
+  ActivityType?_type;
 
   @override
   Widget build(BuildContext context) {
@@ -71,90 +76,113 @@ class _StatsScreenState extends State<StatsScreen> {
               ),
             );
           }
-          return _buildContent(StatsSummary.from(list), list, goalKm);
+          return _buildContent(list, goalKm);
         },
       ),
     );
   }
 
-  Widget _buildContent(StatsSummary s, List<Activity> list, int goalKm) {
+  Widget _buildContent(List<Activity> all, int goalKm) {
+    final list = StatsFilter.apply(all, period: _period, type: _type);
+    final s = StatsSummary.from(list);
     final longest = s.longest;
 
     return ListView(
       padding: const EdgeInsets.all(12),
       children: [
-        const _SectionTitle('Minggu ini'),
-        BsCard(
-          child: Row(
-            children: [
-              Expanded(
-                child: StatTile(
-                  label: 'Aktivitas',
-                  value: '${s.weekCount}',
-                  big: true,
-                ),
-              ),
-              Expanded(
-                child: StatTile(
-                  label: 'Jarak',
-                  value: Fmt.km(s.weekDistanceM),
-                  unit: 'km',
-                  big: true,
-                ),
-              ),
-              Expanded(
-                child: StatTile(
-                  label: 'Waktu',
-                  value: Fmt.duration(s.weekDurationS),
-                  big: true,
-                ),
-              ),
-            ],
-          ),
+        PeriodFilterBar(
+          selected: _period,
+          onChanged: (p) => setState(() => _period = p),
         ),
-        const SizedBox(height: 12),
-        _GoalCard(summary: s, goalKm: goalKm),
-        const SizedBox(height: 16),
-        const _SectionTitle('Jarak 8 minggu terakhir (km)'),
-        BsCard(child: WeeklyBarChart(weeks: s.weeks)),
-        const SizedBox(height: 16),
-        const _SectionTitle('Total keseluruhan'),
-        BsCard(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: StatTile(label: 'Aktivitas', value: '${s.count}'),
-                  ),
-                  Expanded(
-                    child: StatTile(
-                      label: 'Jarak',
-                      value: Fmt.km(s.totalDistanceM),
-                      unit: 'km',
-                    ),
-                  ),
-                  Expanded(
-                    child: StatTile(
-                      label: 'Waktu',
-                      value: Fmt.duration(s.totalDurationS),
-                    ),
-                  ),
-                ],
-              ),
-              const Divider(height: 24, color: BsColors.border),
-              _buildByType(list),
-            ],
-          ),
+        const SizedBox(height: 8),
+        TypeFilterChips(
+          selected: _type,
+          onChanged: (t) => setState(() => _type = t),
         ),
-        if (longest != null) ...[
+        const SizedBox(height: 16),
+        if (list.isEmpty)
+          const BsCard(
+            child: Text(
+              'Tidak ada aktivitas untuk filter ini.',
+              style: TextStyle(color: BsColors.muted),
+            ),
+          )
+        else ...[
+          const _SectionTitle('Minggu ini'),
+          BsCard(
+            child: Row(
+              children: [
+                Expanded(
+                  child: StatTile(
+                    label: 'Aktivitas',
+                    value: '${s.weekCount}',
+                    big: true,
+                  ),
+                ),
+                Expanded(
+                  child: StatTile(
+                    label: 'Jarak',
+                    value: Fmt.km(s.weekDistanceM),
+                    unit: 'km',
+                    big: true,
+                  ),
+                ),
+                Expanded(
+                  child: StatTile(
+                    label: 'Waktu',
+                    value: Fmt.duration(s.weekDurationS),
+                    big: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (_type == null) ...[
+            const SizedBox(height: 12),
+            _GoalCard(summary: s, goalKm: goalKm),
+          ],
           const SizedBox(height: 16),
-          const _SectionTitle('Rekor jarak terjauh'),
-          _HistoryTile(activity: longest),
+          const _SectionTitle('Jarak 8 minggu terakhir (km)'),
+          BsCard(child: WeeklyBarChart(weeks: s.weeks)),
+          const SizedBox(height: 16),
+          _SectionTitle(_period.totalTitle),
+          BsCard(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: StatTile(label: 'Aktivitas', value: '${s.count}'),
+                    ),
+                    Expanded(
+                      child: StatTile(
+                        label: 'Jarak',
+                        value: Fmt.km(s.totalDistanceM),
+                        unit: 'km',
+                      ),
+                    ),
+                    Expanded(
+                      child: StatTile(
+                        label: 'Waktu',
+                        value: Fmt.duration(s.totalDurationS),
+                      ),
+                    ),
+                  ],
+                ),
+                const Divider(height: 24, color: BsColors.border),
+                _buildByType(list),
+              ],
+            ),
+          ),
+          if (longest != null) ...[
+            const SizedBox(height: 16),
+            const _SectionTitle('Rekor jarak terjauh'),
+            _HistoryTile(activity: longest),
+          ],
+          const SizedBox(height: 16),
+          _SectionTitle('Riwayat (${list.length})'),
+          for (final a in list) _HistoryTile(activity: a),
         ],
-        const SizedBox(height: 16),
-        _SectionTitle('Riwayat (${list.length})'),
-        for (final a in list) _HistoryTile(activity: a),
       ],
     );
   }

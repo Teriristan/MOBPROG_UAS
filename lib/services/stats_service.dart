@@ -1,5 +1,7 @@
 import '../core/utils/dates.dart';
 import '../models/activity.dart';
+import '../models/activity_type.dart';
+import '../models/stats_period.dart';
 
 /// Jarak total satu minggu (untuk grafik batang).
 class WeekBar {
@@ -108,5 +110,31 @@ class StatsSummary {
       longest: longest,
       weeks: weeks,
     );
+  }
+}
+
+// Memfilter daftar aktivitas berdasarkan rentang waktu dan jenis.
+class StatsFilter {
+  StatsFilter._();
+
+  static List<Activity> apply(
+    List<Activity> list, {
+    required StatsPeriod period,
+    ActivityType? type,
+    DateTime? now,
+  }) {
+    final today = now ?? DateTime.now();
+    final DateTime? from = switch (period) {
+      StatsPeriod.week => Dates.startOfWeek(today),
+      StatsPeriod.month => Dates.startOfMonth(today),
+      StatsPeriod.all => null,
+    };
+
+    return [
+      for (final a in list)
+        if ((from == null || !a.startTime.isBefore(from)) &&
+            (type == null || a.type == type))
+          a,
+    ];
   }
 }
