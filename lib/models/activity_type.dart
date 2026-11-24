@@ -1,8 +1,3 @@
-/// Jenis aktivitas: lari, sepeda, jalan.
-///
-/// Enum ini sengaja bebas dari Flutter supaya lapisan data bisa diuji tanpa
-/// tampilan. Ikon dan warnanya ada di `ActivityTypeStyle`
-/// (lib/core/theme/bootstrap_theme.dart).
 enum ActivityType {
   run('Lari', 3.0),
   ride('Sepeda', 7.0),

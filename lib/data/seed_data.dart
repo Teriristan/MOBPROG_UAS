@@ -8,8 +8,6 @@ import '../models/activity_type.dart';
 import '../models/app_user.dart';
 import '../models/comment.dart';
 
-/// Kumpulan data contoh yang dimuat saat aplikasi pertama kali dibuka,
-/// supaya feed, peringkat, dan pencarian teman tidak kosong.
 class SeedBundle {
   const SeedBundle({
     required this.users,
@@ -28,18 +26,11 @@ class SeedBundle {
   final Set<String> follows;
 }
 
-/// Pembuat data contoh. Hasilnya tetap (tidak acak) untuk waktu [build]
-/// yang sama, sehingga mudah diuji.
-///
-/// Pengguna contoh tidak punya kata sandi, jadi tidak bisa dipakai masuk.
-/// Mereka hanya ada sebagai teman olahraga yang bisa diikuti.
 class SeedData {
   SeedData._();
 
-  /// Naikkan angka ini bila isi data contoh berubah.
   static const int version = 1;
 
-  /// Awalan ID pengguna contoh.
   static const String userIdPrefix = 'demo_';
 
   static SeedBundle build(DateTime now) {
@@ -145,12 +136,6 @@ class SeedData {
     );
   }
 
-  // ---------------------------------------------------------------------
-  // Pembuat rute
-
-  /// Membuat rute berbentuk lintasan tertutup di sekitar [place] dengan
-  /// panjang mendekati [targetM] meter, lalu membulatkannya seperti saat
-  /// disimpan (supaya sama persis sebelum dan sesudah dimuat ulang).
   static List<LatLng> _buildRoute(
     math.Random rnd,
     _Place place,
@@ -206,14 +191,12 @@ class SeedData {
       return points;
     }
 
-    // Bentuk dasar berukuran 1 km dipakai untuk menentukan skala.
     final unit = make(1000, 0);
     final scale = 1000 * targetM / _length(unit);
     final raw = make(scale, 1.5);
     return RouteUtils.decode(RouteUtils.encode(raw));
   }
 
-  /// Panjang rute dalam meter (rumus haversine).
   static double _length(List<LatLng> points) {
     var total = 0.0;
     for (var i = 1; i < points.length; i++) {
@@ -236,9 +219,6 @@ class SeedData {
             sinLng;
     return 2 * earthRadiusM * math.asin(math.min(1.0, math.sqrt(h)));
   }
-
-  // ---------------------------------------------------------------------
-  // Data
 
   static const List<_Person> _people = <_Person>[
     _Person(
@@ -290,7 +270,6 @@ class SeedData {
   ];
 
   static const List<_Slot> _slots = <_Slot>[
-    // Hari ini (selesai beberapa menit sebelum sekarang).
     _Slot(
       0,
       0,
@@ -327,7 +306,6 @@ class SeedData {
       'Coba rute baru lewat taman.',
       minutesSinceEnd: 20,
     ),
-    // Kemarin dan seterusnya.
     _Slot(2, 1, 6, 30, ActivityType.walk, 3.4, 2, 'Jalan Pagi Santai', ''),
     _Slot(
       4,
@@ -444,7 +422,6 @@ class SeedData {
     'Kapan-kapan lari bareng yuk.',
   ];
 
-  /// (pengikut, diikuti) berdasarkan urutan di [_people].
   static const List<(int, int)> _followPairs = <(int, int)>[
     (0, 1),
     (0, 2),
@@ -470,7 +447,6 @@ class _Person {
   final String name;
   final String bio;
 
-  /// Pengali kecepatan: makin besar makin cepat.
   final double ability;
   final int joinedDaysAgo;
 }
@@ -496,21 +472,16 @@ class _Slot {
     this.minutesSinceEnd = 0,
   });
 
-  /// Indeks di daftar pengguna contoh.
   final int person;
 
-  /// 0 = hari ini (jam dihitung mundur dari sekarang).
   final int daysAgo;
   final int hour;
   final int minute;
   final ActivityType type;
   final double km;
 
-  /// Indeks di daftar tempat.
   final int place;
   final String title;
   final String description;
-
-  /// Hanya untuk aktivitas hari ini: selisih menit antara selesai dan sekarang.
   final int minutesSinceEnd;
 }

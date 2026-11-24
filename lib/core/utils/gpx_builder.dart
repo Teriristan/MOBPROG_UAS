@@ -6,16 +6,11 @@ import '../../models/activity.dart';
 import '../../models/activity_type.dart';
 import '../app_exception.dart';
 
-/// Membuat berkas GPX 1.1 dari rute sebuah aktivitas, yang bisa dibuka di
-/// Strava, Garmin Connect, Google Earth, dan aplikasi peta lainnya.
 class GpxBuilder {
   GpxBuilder._();
 
   static const String creator = 'Lariku';
 
-  /// Rute disimpan tanpa waktu per titik, jadi waktu tiap titik diperkirakan
-  /// dengan membagi durasi aktivitas sebanding dengan jarak yang sudah
-  /// ditempuh. Titik pertama = waktu mulai, titik terakhir = waktu selesai.
   static String build(Activity activity) {
     final route = activity.route;
     if (route.length < 2) {
@@ -60,8 +55,6 @@ class GpxBuilder {
     return out.toString();
   }
 
-  /// Mengganti karakter khusus XML dan membuang karakter kontrol yang tidak
-  /// boleh ada di XML 1.0.
   static String escape(String text) {
     return text
         .replaceAll(RegExp(r'[\u0000-\u0008\u000B\u000C\u000E-\u001F]'), '')
@@ -106,7 +99,6 @@ class GpxBuilder {
     ];
   }
 
-  /// Jarak dua titik di permukaan bumi (rumus haversine), dalam meter.
   static double _distanceM(LatLng a, LatLng b) {
     const earthRadiusM = 6371000.0;
     double rad(double degrees) => degrees * math.pi / 180;
