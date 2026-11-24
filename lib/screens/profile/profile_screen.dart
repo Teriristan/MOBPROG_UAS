@@ -27,9 +27,6 @@ import '../settings/settings_screen.dart';
 import 'edit_profile_screen.dart';
 import 'follow_list_screen.dart';
 
-/// Profil seseorang: nama, bio, pengikut, total, dan daftar aktivitasnya.
-///
-/// [isTab] = true dipakai untuk tab "Profil" milik sendiri (ada tombol keluar).
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.uid, this.isTab = false});
 
@@ -78,8 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _openFollowList({required bool followers}) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) =>
-            FollowListScreen(uid: widget.uid, followers: followers),
+        builder: (_) => FollowListScreen(uid: widget.uid, followers: followers),
       ),
     );
   }

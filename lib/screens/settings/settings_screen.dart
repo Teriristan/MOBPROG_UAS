@@ -17,8 +17,6 @@ import '../../widgets/restore_backup.dart';
 import '../../widgets/saved_file_dialog.dart';
 import 'backup_files_screen.dart';
 
-/// Pengaturan aplikasi (disimpan lewat SharedPreferences) dan pengelolaan
-/// data: cadangan ke berkas / papan klip, pemulihan, dan atur ulang.
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -31,18 +29,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _busy = false;
 
   void _snack(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  /// Menunggu hasil penyimpanan pengaturan dan menampilkan galatnya (bila ada).
   Future<void> _save(Future<String?> change) async {
     final error = await change;
     if (error != null && mounted) _snack(error);
   }
 
-  /// Menjalankan [action] sambil mengunci tombol data supaya tidak tertekan
-  /// dua kali, dan menampilkan galat apa pun sebagai pesan.
   Future<void> _guarded(Future<void> Function() action) async {
     if (_busy) return;
     setState(() => _busy = true);

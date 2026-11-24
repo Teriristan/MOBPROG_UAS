@@ -19,7 +19,6 @@ import '../../widgets/bs/bs_text_field.dart';
 import '../../widgets/route_map.dart';
 import '../../widgets/stat_tile.dart';
 
-/// Layar setelah perekaman selesai: beri judul, catatan, lalu simpan.
 class SaveActivityScreen extends StatefulWidget {
   const SaveActivityScreen({super.key});
 
@@ -32,8 +31,6 @@ class _SaveActivityScreenState extends State<SaveActivityScreen> {
   final _descC = TextEditingController();
   late final TextEditingController _titleC;
 
-  // Salinan data rekaman, supaya tampilan tidak berubah saat provider
-  // di-reset setelah disimpan.
   late final List<LatLng> _route;
   late final double _distanceM;
   late final int _durationS;

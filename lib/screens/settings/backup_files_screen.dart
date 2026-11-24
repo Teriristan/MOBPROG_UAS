@@ -12,8 +12,6 @@ import '../../widgets/empty_state.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/restore_backup.dart';
 
-/// Daftar cadangan yang tersimpan di folder aplikasi. Ketuk satu cadangan
-/// untuk memulihkannya; tombol tempat sampah menghapusnya.
 class BackupFilesScreen extends StatefulWidget {
   const BackupFilesScreen({super.key});
 
@@ -44,8 +42,9 @@ class _BackupFilesScreenState extends State<BackupFilesScreen> {
   }
 
   void _snack(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   Future<void> _restore(StoredFile file) async {

@@ -53,8 +53,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _passC.text,
       );
 
-      // AuthGate sudah menampilkan halaman utama di belakang layar ini,
-      // jadi tutup layar daftar agar halaman utama terlihat.
       if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
     } catch (e) {
       if (mounted) setState(() => _error = AuthService.messageFor(e));

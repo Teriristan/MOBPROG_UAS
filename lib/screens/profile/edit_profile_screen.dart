@@ -12,7 +12,6 @@ import '../../widgets/bs/bs_button.dart';
 import '../../widgets/bs/bs_card.dart';
 import '../../widgets/bs/bs_text_field.dart';
 
-/// Mengubah nama tampilan dan bio.
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key, required this.user});
 

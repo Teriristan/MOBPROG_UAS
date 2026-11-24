@@ -9,7 +9,6 @@ import '../profile/profile_screen.dart';
 import '../record/record_screen.dart';
 import '../stats/stats_screen.dart';
 
-/// Kerangka halaman utama: lima tab dan navigasi di bagian bawah.
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 
@@ -18,9 +17,6 @@ class HomeShell extends StatefulWidget {
 }
 
 class _HomeShellState extends State<HomeShell> {
-  // Tab baru dibangun saat pertama kali dibuka, supaya pengamat data
-  // milik tab lain tidak aktif sebelum dibutuhkan. Setelah dibuka, tab
-  // dipertahankan (IndexedStack) sehingga perekaman dan posisi scroll aman.
   final Set<int> _visited = <int>{0};
 
   @override
@@ -34,7 +30,6 @@ class _HomeShellState extends State<HomeShell> {
     }
 
     return PopScope(
-      // Tombol kembali di tab lain membawa pengguna ke Beranda dulu.
       canPop: nav.index == 0,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) nav.go(0);

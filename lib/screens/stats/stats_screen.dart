@@ -20,8 +20,6 @@ import '../../widgets/weekly_bar_chart.dart';
 import '../feed/activity_detail_screen.dart';
 import '../settings/settings_screen.dart';
 
-/// Statistik pribadi: ringkasan minggu ini, grafik 8 minggu, total, dan
-/// riwayat seluruh aktivitas.
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
 
@@ -195,7 +193,6 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 }
 
-/// Kemajuan minggu ini menuju target jarak mingguan (diatur di Pengaturan).
 class _GoalCard extends StatelessWidget {
   const _GoalCard({required this.summary, required this.goalKm});
 

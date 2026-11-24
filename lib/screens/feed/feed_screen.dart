@@ -14,7 +14,6 @@ import '../../widgets/empty_state.dart';
 import '../../widgets/error_view.dart';
 import '../profile/search_users_screen.dart';
 
-/// Beranda: feed aktivitas dengan dua tab, "Semua" dan "Mengikuti".
 class FeedScreen extends StatelessWidget {
   const FeedScreen({super.key});
 
@@ -52,7 +51,6 @@ class FeedScreen extends StatelessWidget {
   }
 }
 
-/// Daftar kartu dari hasil stream (loading, error, kosong, atau berisi).
 class _FeedList extends StatelessWidget {
   const _FeedList({required this.snapshot, required this.empty});
 
