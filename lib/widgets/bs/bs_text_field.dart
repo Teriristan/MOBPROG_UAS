@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/bootstrap_theme.dart';
 
-/// Input ala Bootstrap: label di atas, kotak input (form-control) di bawah.
 class BsTextField extends StatelessWidget {
   const BsTextField({
     super.key,

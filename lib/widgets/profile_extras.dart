@@ -20,9 +20,6 @@ Widget _sectionTitle(String text) => Padding(
   ),
 );
 
-// =====================================================================
-// Target mingguan, streak, perbandingan minggu, rincian jenis, salin ringkasan
-
 class ProfileExtras extends StatelessWidget {
   const ProfileExtras({
     super.key,
@@ -131,8 +128,6 @@ class ProfileExtras extends StatelessWidget {
     );
   }
 }
-
-// ======================= TARGET MINGGUAN =======================
 
 class _WeeklyGoalCard extends StatefulWidget {
   const _WeeklyGoalCard({required this.uid, required this.weekM});
@@ -261,9 +256,7 @@ class _GoalDialogState extends State<_GoalDialog> {
   late final TextEditingController _c = TextEditingController(
     text: widget.current == null
         ? ''
-        : widget.current!.toStringAsFixed(
-            widget.current! % 1 == 0 ? 0 : 1,
-          ),
+        : widget.current!.toStringAsFixed(widget.current! % 1 == 0 ? 0 : 1),
   );
   String? _error;
 
@@ -350,8 +343,7 @@ class _WeekCard extends StatelessWidget {
     } else {
       final pct = ((weekM - lastM) / lastM * 100).round();
       final up = pct >= 0;
-      delta =
-          '${up ? '+' : ''}$pct% dari minggu lalu (${Fmt.km(lastM)} km)';
+      delta = '${up ? '+' : ''}$pct% dari minggu lalu (${Fmt.km(lastM)} km)';
       deltaColor = up ? BsColors.success : BsColors.danger;
       deltaIcon = up ? Icons.trending_up : Icons.trending_down;
     }
@@ -368,7 +360,11 @@ class _WeekCard extends StatelessWidget {
                 _DayDot(
                   label: _labels[i],
                   active: days.contains(
-                    DateTime(weekStart.year, weekStart.month, weekStart.day + i),
+                    DateTime(
+                      weekStart.year,
+                      weekStart.month,
+                      weekStart.day + i,
+                    ),
                   ),
                   isToday:
                       DateTime(
@@ -515,8 +511,6 @@ class _MiniStat extends StatelessWidget {
   }
 }
 
-// ======================= RINCIAN PER JENIS =======================
-
 class _TypeBreakdown extends StatelessWidget {
   const _TypeBreakdown({required this.items});
 
@@ -599,7 +593,12 @@ class _InsightsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dayCount = List<int>.filled(7, 0);
-    final slotCount = <String, int>{'Pagi': 0, 'Siang': 0, 'Sore': 0, 'Malam': 0};
+    final slotCount = <String, int>{
+      'Pagi': 0,
+      'Siang': 0,
+      'Sore': 0,
+      'Malam': 0,
+    };
     final weekTotals = <DateTime, double>{};
     final monthStart = Dates.startOfMonth(DateTime.now());
     var totalM = 0.0;
@@ -721,9 +720,6 @@ class _InsightRow extends StatelessWidget {
     );
   }
 }
-
-// =====================================================================
-// Daftar aktivitas dengan filter jenis, periode, dan urutan
 
 enum _Period {
   all('Semua'),

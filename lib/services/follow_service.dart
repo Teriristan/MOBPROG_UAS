@@ -1,6 +1,5 @@
 import '../data/local_db.dart';
 
-/// Relasi mengikuti antar pengguna.
 class FollowService {
   FollowService({LocalDb? db}) : _db = db ?? LocalDb.instance;
 
@@ -19,17 +18,14 @@ class FollowService {
     return _db.watch<Set<String>>(() => _db.followingOf(uid));
   }
 
-  /// Daftar UID yang mengikuti [uid].
   Stream<Set<String>> watchFollowerIds(String uid) {
     return _db.watch<Set<String>>(() => _db.followersOf(uid));
   }
 
-  /// Jumlah pengikut [uid].
   Stream<int> watchFollowersCount(String uid) {
     return _db.watch<int>(() => _db.followersCount(uid));
   }
 
-  /// Jumlah orang yang diikuti [uid].
   Stream<int> watchFollowingCount(String uid) {
     return _db.watch<int>(() => _db.followingCount(uid));
   }

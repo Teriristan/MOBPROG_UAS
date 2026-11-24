@@ -8,8 +8,6 @@ import '../services/auth_service.dart';
 import '../services/user_service.dart';
 import 'user_avatar.dart';
 
-/// Avatar milik sendiri yang bisa diketuk untuk mengganti foto profil
-/// (kamera, galeri, atau hapus foto).
 class ProfilePhotoEditor extends StatefulWidget {
   const ProfilePhotoEditor({
     super.key,
@@ -31,7 +29,6 @@ class _ProfilePhotoEditorState extends State<ProfilePhotoEditor> {
   final UserService _users = UserService();
   bool _busy = false;
 
-  // Kamera hanya tersedia di web dan HP.
   bool get _canUseCamera =>
       kIsWeb ||
       defaultTargetPlatform == TargetPlatform.android ||
@@ -47,7 +44,7 @@ class _ProfilePhotoEditorState extends State<ProfilePhotoEditor> {
         maxHeight: 256,
         imageQuality: 70,
       );
-      if (picked == null) return; // dibatalkan
+      if (picked == null) return;
       final bytes = await picked.readAsBytes();
       await _users.updatePhoto(widget.uid, bytes);
       messenger.showSnackBar(

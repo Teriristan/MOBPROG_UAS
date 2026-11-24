@@ -4,26 +4,20 @@ import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart' show LatLng;
 
-/// Satu titik GPS yang sudah disederhanakan.
 class GpsPoint {
   const GpsPoint({
     required this.latLng,
     required this.accuracy,
     required this.time,
   });
-
   final LatLng latLng;
-
-  /// Akurasi dalam meter (makin kecil makin baik).
   final double accuracy;
   final DateTime time;
 }
 
 enum LocationAccess { granted, serviceDisabled, denied, deniedForever }
 
-/// Pembungkus GPS (geolocator), plus mode simulasi untuk uji coba.
 class LocationService {
-  /// Memeriksa layanan lokasi dan meminta izin bila perlu.
   Future<LocationAccess> ensureAccess() async {
     final enabled = await Geolocator.isLocationServiceEnabled();
     if (!enabled) return LocationAccess.serviceDisabled;
@@ -49,8 +43,6 @@ class LocationService {
       'Izin lokasi ditolak permanen. Aktifkan lewat Pengaturan aplikasi.',
   };
 
-  /// Posisi saat ini. Mengembalikan null bila gagal.
-  /// Tanpa [askPermission], tidak ada permintaan izin yang muncul.
   Future<LatLng?> currentLatLng({bool askPermission = false}) async {
     try {
       if (askPermission) {
@@ -77,7 +69,6 @@ class LocationService {
     }
   }
 
-  /// Aliran posisi GPS asli.
   Stream<GpsPoint> positionStream() {
     return Geolocator.getPositionStream(locationSettings: _settings()).map(
       (p) => GpsPoint(
@@ -88,8 +79,6 @@ class LocationService {
     );
   }
 
-  /// Aliran posisi palsu untuk uji coba: berjalan memutari satu lingkaran
-  /// (jari-jari 120 m) dengan kecepatan [speedMps] meter per detik.
   Stream<GpsPoint> simulatedStream({
     required LatLng start,
     required double speedMps,

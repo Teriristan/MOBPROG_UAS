@@ -4,7 +4,6 @@ import '../core/theme/bootstrap_theme.dart';
 import '../core/utils/formatters.dart';
 import '../models/activity_type.dart';
 
-/// Satu angka statistik: label kecil di atas, nilai besar di bawah.
 class StatTile extends StatelessWidget {
   const StatTile({
     super.key,
@@ -70,8 +69,6 @@ class StatTile extends StatelessWidget {
   }
 }
 
-/// Tiga angka utama aktivitas: jarak, waktu, dan pace (atau kecepatan
-/// untuk sepeda).
 class ActivityStatsRow extends StatelessWidget {
   const ActivityStatsRow({
     super.key,

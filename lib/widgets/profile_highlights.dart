@@ -7,13 +7,11 @@ import '../models/activity.dart';
 import 'bs/bs_card.dart';
 import 'stat_tile.dart';
 
-/// Rekor pribadi, level pelari, dan pencapaian untuk halaman Profil.
 class ProfileHighlights extends StatelessWidget {
   const ProfileHighlights({super.key, required this.items});
 
   final List<Activity> items;
 
-  // ---------- helper (dipakai juga oleh ProfileExtras) ----------
   static String formatPace(double secPerKm) {
     final total = secPerKm.round();
     final m = total ~/ 60;
@@ -22,14 +20,10 @@ class ProfileHighlights extends StatelessWidget {
   }
 
   static double _paceOf(Activity a) => a.durationS / (a.distanceM / 1000);
-
-  /// Himpunan hari (pukul 00:00) yang punya minimal satu aktivitas.
   static Set<DateTime> activeDays(List<Activity> items) => <DateTime>{
     for (final a in items) Dates.startOfDay(a.startTime),
   };
 
-  /// Streak hari berturut-turut sampai hari ini. Bila hari ini belum ada
-  /// aktivitas, streak kemarin masih dihitung.
   static int currentStreak(Set<DateTime> days, DateTime now) {
     var d = Dates.startOfDay(now);
     if (!days.contains(d)) d = DateTime(d.year, d.month, d.day - 1);
@@ -41,7 +35,6 @@ class ProfileHighlights extends StatelessWidget {
     return n;
   }
 
-  /// Streak terpanjang sepanjang riwayat.
   static int longestStreak(Set<DateTime> days) {
     final sorted = days.toList()..sort();
     var best = 0;
@@ -175,8 +168,6 @@ class ProfileHighlights extends StatelessWidget {
   );
 }
 
-// ======================= LEVEL =======================
-
 class _Level {
   const _Level(this.name, this.minKm, this.icon);
   final String name;
@@ -269,8 +260,6 @@ class _LevelCard extends StatelessWidget {
   }
 }
 
-// ======================= PENCAPAIAN =======================
-
 class _Badge {
   const _Badge(this.label, this.icon, this.unlocked);
   final String label;
@@ -305,11 +294,7 @@ class _Achievements extends StatelessWidget {
       _Badge('Lari 10K', Icons.timeline, longestKm >= 10),
       _Badge('Half Marathon', Icons.military_tech, longestKm >= 21.1),
       _Badge('Total 100 km', Icons.public, totalKm >= 100),
-      _Badge(
-        'Streak 3 Hari',
-        Icons.local_fire_department,
-        longestStreak >= 3,
-      ),
+      _Badge('Streak 3 Hari', Icons.local_fire_department, longestStreak >= 3),
       _Badge('Streak 7 Hari', Icons.whatshot, longestStreak >= 7),
       _Badge('Semua Jenis', Icons.category, typeCount >= 3),
       _Badge('Pelari Subuh', Icons.wb_twilight, earlyBird),

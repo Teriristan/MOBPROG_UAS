@@ -5,8 +5,6 @@ import 'package:latlong2/latlong.dart' show LatLng;
 
 import '../core/theme/bootstrap_theme.dart';
 
-/// Sketsa rute ringan yang digambar sendiri (tanpa memuat tile peta),
-/// dipakai di kartu feed supaya hemat kuota dan cepat.
 class RouteSketch extends StatelessWidget {
   const RouteSketch({
     super.key,
@@ -59,7 +57,6 @@ class _RoutePainter extends CustomPainter {
       maxLng = math.max(maxLng, p.longitude);
     }
 
-    // Koreksi bujur supaya bentuk rute tidak melar.
     final lngScale = math.cos((minLat + maxLat) / 2 * math.pi / 180);
     final spanX = math.max((maxLng - minLng) * lngScale, 1e-9);
     final spanY = math.max(maxLat - minLat, 1e-9);

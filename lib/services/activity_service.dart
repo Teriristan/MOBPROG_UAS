@@ -1,19 +1,13 @@
 import '../data/local_db.dart';
 import '../models/activity.dart';
 
-/// Membaca dan menulis aktivitas.
-///
-/// Semua `watch...` mengirim daftar terbaru setiap kali data berubah
-/// (misalnya setelah ada yang memberi kudos), tanpa perlu menarik ulang.
 class ActivityService {
   ActivityService({LocalDb? db}) : _db = db ?? LocalDb.instance;
 
   final LocalDb _db;
 
-  /// Menyimpan aktivitas baru. Mengembalikan ID-nya.
   Future<String> create(Activity activity) => _db.addActivity(activity);
 
-  /// Feed "Semua": aktivitas terbaru dari semua pengguna.
   Stream<List<Activity>> watchFeed({int limit = 30}) {
     return _db.watch<List<Activity>>(
       () => _db.allActivities().take(limit).toList(),

@@ -5,7 +5,6 @@ import 'package:flutter_lokasi2/models/activity_type.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart' show LatLng;
 
-// Tiga titik lurus ke utara: jarak titik 1→2 sepertiga dari seluruh rute.
 const List<LatLng> _straight = <LatLng>[
   LatLng(-6.200, 106.800),
   LatLng(-6.199, 106.800),
@@ -33,10 +32,10 @@ Activity _activity({
   );
 }
 
-/// Waktu semua titik (`<time>` di dalam `<trkpt>`), berurutan.
 List<DateTime> _pointTimes(String gpx) {
-  final matches = RegExp(r'<trkpt[^>]*>\s*<time>([^<]+)</time>')
-      .allMatches(gpx);
+  final matches = RegExp(
+    r'<trkpt[^>]*>\s*<time>([^<]+)</time>',
+  ).allMatches(gpx);
   return <DateTime>[for (final m in matches) DateTime.parse(m.group(1)!)];
 }
 
