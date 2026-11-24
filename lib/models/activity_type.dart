@@ -7,13 +7,10 @@ enum ActivityType {
 
   final String label;
 
-  /// Kecepatan (meter per detik) yang dipakai mode simulasi dan data contoh.
   final double simulatedSpeedMps;
 
-  /// Sepeda ditampilkan dalam km/jam, lainnya dalam pace (menit per km).
   bool get usesSpeed => this == ActivityType.ride;
 
-  /// Mengubah teks yang tersimpan (`run`, `ride`, `walk`) menjadi enum.
   static ActivityType fromKey(String? key) {
     for (final t in ActivityType.values) {
       if (t.name == key) return t;

@@ -1,12 +1,7 @@
 import 'package:flutter/foundation.dart';
-
 import '../models/session_user.dart';
 import '../services/auth_service.dart';
 
-/// Menyimpan status login dan menyediakan aksi masuk / daftar / keluar.
-///
-/// Sesi login diingat di localStorage, jadi setelah halaman dimuat ulang
-/// pengguna tetap masuk.
 class AuthProvider extends ChangeNotifier {
   AuthProvider({AuthService? authService})
     : _auth = authService ?? AuthService() {
@@ -19,7 +14,6 @@ class AuthProvider extends ChangeNotifier {
   SessionUser? get user => _user;
   bool get isLoggedIn => _user != null;
 
-  /// Nama pengguna yang sedang masuk.
   String get displayName {
     final u = _user;
     if (u == null) return 'Pengguna';
@@ -40,8 +34,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Mengubah nama tampilan akun (profil diubah terpisah lewat UserService;
-  /// pemanggilan ini hanya memastikan nama di akun ikut berubah).
   Future<void> updateDisplayName(String name) async {
     await _auth.updateDisplayName(name);
     _user = _auth.currentUser;
@@ -54,19 +46,14 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Menghapus semua data lokal, memuat ulang data contoh, dan keluar.
   Future<void> resetLocalData() async {
     try {
       await _auth.resetLocalData();
     } finally {
-      // Sesi sudah terhapus di memori walau penyimpanan gagal, jadi status
-      // login di sini harus ikut mengikuti database.
       syncSession();
     }
   }
 
-  /// Membaca ulang akun yang sedang masuk dari database. Dipanggil setelah
-  /// isi database diganti dari luar, misalnya saat memulihkan cadangan.
   void syncSession() {
     _user = _auth.currentUser;
     notifyListeners();
