@@ -58,4 +58,9 @@ class AuthProvider extends ChangeNotifier {
     _user = _auth.currentUser;
     notifyListeners();
   }
+
+  void forceRequireLogin() {
+    _user = null;
+    notifyListeners();
+  }
 }
