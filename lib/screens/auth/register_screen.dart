@@ -53,9 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _passC.text,
       );
 
-      if (!mounted) return;
-      context.read<AuthProvider>().forceRequireLogin();
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
     } catch (e) {
       if (mounted) setState(() => _error = AuthService.messageFor(e));
     } finally {

@@ -12,7 +12,6 @@ import '../../widgets/route_map.dart';
 import '../../widgets/stat_tile.dart';
 import 'save_activity_screen.dart';
 
-/// Layar rekam: peta langsung, statistik berjalan, dan tombol kontrol.
 class RecordScreen extends StatefulWidget {
   const RecordScreen({super.key});
 
@@ -24,8 +23,6 @@ class _RecordScreenState extends State<RecordScreen> {
   @override
   void initState() {
     super.initState();
-    // Coba ambil lokasi (tanpa meminta izin) agar peta langsung tertuju
-    // ke posisi pengguna.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) context.read<TrackingProvider>().locate();
     });
@@ -290,7 +287,6 @@ class _RecordScreenState extends State<RecordScreen> {
   }
 }
 
-/// Panel di atas peta: pemilih jenis aktivitas, atau status perekaman.
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.tracking});
 

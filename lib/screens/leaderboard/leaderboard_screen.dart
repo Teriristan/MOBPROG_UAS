@@ -17,7 +17,6 @@ import '../profile/profile_screen.dart';
 
 enum _Period { week, month }
 
-/// Papan peringkat jarak: filter periode, jenis aktivitas, dan pengguna.
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
 
@@ -237,11 +236,7 @@ class _RankTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                UserAvatar(
-                  name: entry.userName,
-                  radius: 20,
-                  uid: entry.userId,
-                ),
+                UserAvatar(name: entry.userName, radius: 20, uid: entry.userId),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(

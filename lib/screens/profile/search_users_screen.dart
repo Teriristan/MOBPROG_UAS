@@ -19,7 +19,6 @@ import '../../widgets/error_view.dart';
 import '../../widgets/user_avatar.dart';
 import 'profile_screen.dart';
 
-/// Mencari pengguna lain berdasarkan awalan nama, lalu mengikutinya.
 class SearchUsersScreen extends StatefulWidget {
   const SearchUsersScreen({super.key});
 
@@ -40,7 +39,7 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
   @override
   void initState() {
     super.initState();
-    _load(''); // tampilkan pengguna terbaru dulu
+    _load('');
   }
 
   @override
@@ -66,7 +65,6 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
     final id = ++_requestId;
     try {
       final list = await _service.search(keyword);
-      // Abaikan hasil lama bila pengguna sudah mengetik kata lain.
       if (!mounted || id != _requestId) return;
       setState(() {
         _results = list;

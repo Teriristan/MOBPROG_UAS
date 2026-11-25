@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/bootstrap_theme.dart';
 
-/// Kartu ala Bootstrap: latar putih, garis tipis, sudut 6px, tanpa bayangan.
 class BsCard extends StatelessWidget {
   const BsCard({
     super.key,

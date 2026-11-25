@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../core/theme/bootstrap_theme.dart';
 
-/// Kotak pesan ala Bootstrap (alert alert-danger, alert-success, dst.).
 class BsAlert extends StatelessWidget {
   const BsAlert({
     super.key,

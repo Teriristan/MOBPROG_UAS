@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../models/activity_type.dart';
 
-/// Warna resmi Bootstrap 5.3.
 class BsColors {
   BsColors._();
 
@@ -17,24 +16,22 @@ class BsColors {
   static const Color orange = Color(0xFFFD7E14);
   static const Color purple = Color(0xFF6F42C1);
 
-  static const Color body = Color(0xFF212529); // warna teks
-  static const Color muted = Color(0xFF6C757D); // teks redup
-  static const Color border = Color(0xFFDEE2E6); // garis pinggir
-  static const Color background = Color(0xFFF8F9FA); // latar halaman
-  static const Color focus = Color(0xFF86B7FE); // pinggir input saat fokus
+  static const Color body = Color(0xFF212529);
+  static const Color muted = Color(0xFF6C757D);
+  static const Color border = Color(0xFFDEE2E6);
+  static const Color background = Color(0xFFF8F9FA);
+  static const Color focus = Color(0xFF86B7FE);
 }
 
-/// Radius sudut Bootstrap.
 class BsRadius {
   BsRadius._();
 
-  static const double sm = 4; // .25rem
-  static const double md = 6; // .375rem (default Bootstrap)
-  static const double lg = 8; // .5rem
-  static const double xl = 16; // 1rem
+  static const double sm = 4;
+  static const double md = 6;
+  static const double lg = 8;
+  static const double xl = 16;
 }
 
-/// Varian warna, seperti btn-primary, alert-danger, badge bg-success, dst.
 enum BsVariant {
   primary,
   secondary,
@@ -47,7 +44,6 @@ enum BsVariant {
 }
 
 extension BsVariantStyle on BsVariant {
-  /// Warna solid (tombol dan badge).
   Color get color => switch (this) {
     BsVariant.primary => BsColors.primary,
     BsVariant.secondary => BsColors.secondary,
@@ -59,13 +55,11 @@ extension BsVariantStyle on BsVariant {
     BsVariant.dark => BsColors.dark,
   };
 
-  /// Warna teks di atas warna solid.
   Color get onColor => switch (this) {
     BsVariant.warning || BsVariant.info || BsVariant.light => BsColors.dark,
     _ => Colors.white,
   };
 
-  /// Latar lembut (alert).
   Color get subtleBg => switch (this) {
     BsVariant.primary => const Color(0xFFCFE2FF),
     BsVariant.secondary => const Color(0xFFE2E3E5),
@@ -77,7 +71,6 @@ extension BsVariantStyle on BsVariant {
     BsVariant.dark => const Color(0xFFCED4DA),
   };
 
-  /// Garis pinggir lembut (alert).
   Color get subtleBorder => switch (this) {
     BsVariant.primary => const Color(0xFF9EC5FE),
     BsVariant.secondary => const Color(0xFFC4C8CB),
@@ -102,8 +95,6 @@ extension BsVariantStyle on BsVariant {
   };
 }
 
-/// Ikon dan warna tiap jenis aktivitas. Dipisah dari enum [ActivityType]
-/// supaya model data tidak bergantung pada Flutter.
 extension ActivityTypeStyle on ActivityType {
   IconData get icon => switch (this) {
     ActivityType.run => Icons.directions_run,

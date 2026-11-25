@@ -15,7 +15,6 @@ import 'package:latlong2/latlong.dart' show LatLng;
 
 final DateTime _now = DateTime(2026, 11, 10, 18, 44, 5);
 
-// Penyimpanan berkas di memori. Waktu ubah naik satu menit tiap penulisan.
 class _MemoryFiles implements FileStorage {
   final Map<String, String> files = <String, String>{};
   final Map<String, DateTime> modified = <String, DateTime>{};
@@ -293,8 +292,9 @@ void main() {
       expect(await storage.read('a.json'), text);
       // Disimpan sebagai UTF-8 sungguhan.
       expect(
-        await File('${target.path}${Platform.pathSeparator}a.json')
-            .readAsBytes(),
+        await File(
+          '${target.path}${Platform.pathSeparator}a.json',
+        ).readAsBytes(),
         utf8.encode(text),
       );
     });
@@ -388,7 +388,6 @@ void main() {
           reason: 'delete "$name"',
         );
       }
-      // Nama yang ditolak tidak sempat membuat folder atau berkas apa pun.
       expect(await root.list().toList(), isEmpty);
     });
 

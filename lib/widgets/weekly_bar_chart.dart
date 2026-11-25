@@ -4,8 +4,6 @@ import '../core/theme/bootstrap_theme.dart';
 import '../core/utils/formatters.dart';
 import '../services/stats_service.dart';
 
-/// Grafik batang jarak per minggu (km), digambar dengan widget biasa
-/// sehingga tidak butuh package grafik.
 class WeeklyBarChart extends StatelessWidget {
   const WeeklyBarChart({
     super.key,

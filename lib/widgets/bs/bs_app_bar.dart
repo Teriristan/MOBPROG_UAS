@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/bootstrap_theme.dart';
 
-/// Navbar ala Bootstrap (latar biru primary).
 class BsAppBar extends StatelessWidget implements PreferredSizeWidget {
   const BsAppBar({super.key, required this.title, this.actions, this.bottom});
 
   final String title;
   final List<Widget>? actions;
 
-  /// Biasanya TabBar.
   final PreferredSizeWidget? bottom;
 
   @override

@@ -10,11 +10,6 @@ import '../providers/tracking_provider.dart';
 import '../services/auth_service.dart';
 import '../services/export_service.dart';
 
-/// Memeriksa teks cadangan, meminta persetujuan pengguna, lalu memulihkannya.
-/// Mengembalikan true bila data berhasil diganti.
-///
-/// Setelah berhasil, semua layar di atas halaman utama ditutup dan pengguna
-/// kembali ke halaman masuk, karena sesi login tidak ikut dicadangkan.
 Future<bool> confirmAndRestoreBackup(
   BuildContext context,
   String text, {

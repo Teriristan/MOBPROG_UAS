@@ -7,9 +7,6 @@ import '../providers/nav_provider.dart';
 import '../providers/tracking_provider.dart';
 import '../services/auth_service.dart';
 
-/// Menampilkan dialog konfirmasi, lalu menghapus semua data lokal (akun,
-/// aktivitas, kudos, komentar, pengikut) dan memuat ulang data contoh.
-/// Setelah itu pengguna kembali ke halaman masuk.
 Future<void> confirmAndResetLocalData(BuildContext context) async {
   final auth = context.read<AuthProvider>();
   final tracking = context.read<TrackingProvider>();
@@ -45,8 +42,7 @@ Future<void> confirmAndResetLocalData(BuildContext context) async {
 
   tracking.reset();
   nav.go(0);
-  // Layar yang dibuka di atas halaman utama (misalnya Pengaturan) ditutup,
-  // karena setelah ini pengguna kembali ke halaman masuk.
+
   navigator.popUntil((route) => route.isFirst);
   try {
     await auth.resetLocalData();

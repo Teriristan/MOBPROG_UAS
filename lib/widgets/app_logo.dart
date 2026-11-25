@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../core/constants.dart';
 import '../core/theme/bootstrap_theme.dart';
 
-/// Menampilkan logo dari assets/images/logo.png.
-/// Kalau file belum ada, tampil ikon pengganti (tidak error).
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key, this.size = 80});
 

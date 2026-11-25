@@ -3,8 +3,6 @@ import 'package:latlong2/latlong.dart' show LatLng;
 import '../core/utils/route_utils.dart';
 import 'activity_type.dart';
 
-/// Satu aktivitas (lari, sepeda, atau jalan) beserta rute GPS-nya
-/// (disimpan di localStorage pada kunci `lariku_activities`).
 class Activity {
   const Activity({
     required this.id,
@@ -33,7 +31,6 @@ class Activity {
   final List<LatLng> route;
   final List<String> kudosBy;
 
-  /// Dihitung dari daftar komentar saat aktivitas dibaca, tidak disimpan.
   final int commentsCount;
 
   int get kudosCount => kudosBy.length;
@@ -61,8 +58,6 @@ class Activity {
     );
   }
 
-  /// Bentuk JSON yang disimpan. Waktu disimpan sebagai milidetik sejak epoch
-  /// dan rute dipadatkan oleh [RouteUtils.encode].
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'id': id,

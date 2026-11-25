@@ -1,5 +1,3 @@
-/// Komentar pada sebuah aktivitas
-/// (disimpan di localStorage pada kunci `lariku_comments`).
 class Comment {
   const Comment({
     required this.id,

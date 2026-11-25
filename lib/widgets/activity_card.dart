@@ -14,8 +14,6 @@ import 'route_sketch.dart';
 import 'stat_tile.dart';
 import 'user_avatar.dart';
 
-/// Kartu aktivitas di feed dan profil: pembuat, judul, angka utama,
-/// sketsa rute, serta tombol kudos dan komentar.
 class ActivityCard extends StatelessWidget {
   const ActivityCard({
     super.key,
@@ -25,7 +23,6 @@ class ActivityCard extends StatelessWidget {
 
   final Activity activity;
 
-  /// false → nama pembuat disembunyikan (di halaman profil orangnya sendiri).
   final bool showAuthor;
 
   void _openDetail(BuildContext context) {
@@ -77,7 +74,11 @@ class ActivityCard extends StatelessWidget {
               if (showAuthor) ...[
                 GestureDetector(
                   onTap: () => _openProfile(context),
-                  child: UserAvatar(name: a.userName, radius: 20, uid: a.userId),
+                  child: UserAvatar(
+                    name: a.userName,
+                    radius: 20,
+                    uid: a.userId,
+                  ),
                 ),
                 const SizedBox(width: 10),
               ],

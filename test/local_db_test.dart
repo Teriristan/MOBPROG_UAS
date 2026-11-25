@@ -9,7 +9,6 @@ import 'package:flutter_lokasi2/models/activity_type.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart' show LatLng;
 
-/// Penyimpanan yang bisa dibuat gagal menulis, meniru penyimpanan yang penuh.
 class _FlakyStore extends MemoryStore {
   bool failWrites = false;
 
@@ -60,8 +59,6 @@ Activity _draft(
   );
 }
 
-/// Dunia contoh untuk pengujian cadangan: data contoh ditambah akun Ani yang
-/// punya aktivitas ber-rute, kudos, komentar, dan satu teman yang diikuti.
 class _World {
   const _World(this.db, this.store, this.uid, this.activityId);
 
@@ -94,7 +91,6 @@ Future<_World> _populated({MemoryStore? store}) async {
   return _World(db, s, uid, id);
 }
 
-/// Mengubah isi JSON cadangan [text] lewat [change], lalu menyusunnya lagi.
 String _edit(String text, void Function(Map<String, dynamic> root) change) {
   final root = jsonDecode(text) as Map<String, dynamic>;
   change(root);
@@ -474,25 +470,28 @@ void main() {
   });
 
   group('Pengamatan (watch)', () {
-    test('mengirim nilai awal, mengirim ulang saat berubah, berhenti saat dibatalkan', () async {
-      final db = await _open();
-      final events = <int>[];
-      final sub = db
-          .watch<int>(() => db.followersCount('b'))
-          .listen(events.add);
+    test(
+      'mengirim nilai awal, mengirim ulang saat berubah, berhenti saat dibatalkan',
+      () async {
+        final db = await _open();
+        final events = <int>[];
+        final sub = db
+            .watch<int>(() => db.followersCount('b'))
+            .listen(events.add);
 
-      await Future<void>.delayed(Duration.zero);
-      expect(events, <int>[0]);
+        await Future<void>.delayed(Duration.zero);
+        expect(events, <int>[0]);
 
-      await db.setFollow(me: 'a', target: 'b', follow: true);
-      await Future<void>.delayed(Duration.zero);
-      expect(events, <int>[0, 1]);
+        await db.setFollow(me: 'a', target: 'b', follow: true);
+        await Future<void>.delayed(Duration.zero);
+        expect(events, <int>[0, 1]);
 
-      await sub.cancel();
-      await db.setFollow(me: 'c', target: 'b', follow: true);
-      await Future<void>.delayed(Duration.zero);
-      expect(events, <int>[0, 1]);
-    });
+        await sub.cancel();
+        await db.setFollow(me: 'c', target: 'b', follow: true);
+        await Future<void>.delayed(Duration.zero);
+        expect(events, <int>[0, 1]);
+      },
+    );
 
     test(
       'satu aliran boleh didengarkan berkali-kali oleh banyak pendengar',

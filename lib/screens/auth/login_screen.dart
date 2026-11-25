@@ -47,7 +47,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await context.read<AuthProvider>().login(_emailC.text, _passC.text);
-      // Kalau berhasil, AuthGate otomatis pindah ke halaman utama.
     } catch (e) {
       if (mounted) setState(() => _error = AuthService.messageFor(e));
     } finally {
