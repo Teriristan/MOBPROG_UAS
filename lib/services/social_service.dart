@@ -1,13 +1,11 @@
 import '../data/local_db.dart';
 import '../models/comment.dart';
 
-/// Kudos dan komentar.
 class SocialService {
   SocialService({LocalDb? db}) : _db = db ?? LocalDb.instance;
 
   final LocalDb _db;
 
-  /// Memberi ([give] = true) atau mencabut kudos.
   Future<void> setKudos({
     required String activityId,
     required String uid,
@@ -16,7 +14,6 @@ class SocialService {
     return _db.setKudos(activityId: activityId, uid: uid, give: give);
   }
 
-  /// Komentar sebuah aktivitas, yang terlama di atas.
   Stream<List<Comment>> watchComments(String activityId) {
     return _db.watch<List<Comment>>(() => _db.commentsFor(activityId));
   }

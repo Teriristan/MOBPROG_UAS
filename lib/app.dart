@@ -13,12 +13,9 @@ import 'screens/home/home_shell.dart';
 import 'widgets/app_logo.dart';
 import 'widgets/bs/bs_alert.dart';
 
-/// Akar aplikasi: menyediakan semua Provider lalu menampilkan [AuthGate].
 class LarikuApp extends StatelessWidget {
   const LarikuApp({super.key, required this.settings});
 
-  /// Pengaturan yang sudah dimuat di `main`. Dibuat di luar widget ini supaya
-  /// nilainya sudah siap sebelum layar pertama tampil.
   final SettingsProvider settings;
 
   @override
@@ -50,8 +47,6 @@ class LarikuApp extends StatelessWidget {
   }
 }
 
-/// Memilih halaman berdasarkan status login:
-/// sudah masuk -> beranda, belum -> halaman masuk.
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
@@ -62,8 +57,6 @@ class AuthGate extends StatelessWidget {
   }
 }
 
-/// Ditampilkan bila penyimpanan lokal gagal dibuka, supaya penyebabnya
-/// terlihat jelas dan bukan layar kosong.
 class StartupErrorApp extends StatelessWidget {
   const StartupErrorApp({super.key, required this.message});
 

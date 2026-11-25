@@ -12,13 +12,6 @@ import 'settings_provider.dart';
 
 enum TrackingStatus { idle, recording, paused, finished }
 
-/// Mesin status perekaman aktivitas: idle → recording ⇄ paused → finished.
-/// Disimpan di level aplikasi supaya perekaman tetap berjalan saat pengguna
-/// berpindah tab.
-///
-/// Jenis aktivitas dan mode simulasi awal diambil dari [SettingsProvider].
-/// Bila pengaturan itu diubah saat sedang merekam, nilainya baru dipakai
-/// setelah rekaman selesai atau dibuang.
 class TrackingProvider extends ChangeNotifier {
   TrackingProvider({LocationService? location, SettingsProvider? settings})
     : _location = location ?? LocationService(),
@@ -34,16 +27,13 @@ class TrackingProvider extends ChangeNotifier {
   final LocationService _location;
   final SettingsProvider? _settings;
 
-  // Nilai bawaan dari pengaturan, dan apakah ada perubahan yang menunggu
-  // rekaman selesai.
   ActivityType _defaultType = ActivityType.run;
   bool _defaultSimulate = false;
   bool _defaultsPending = false;
 
-  // Penyaring data GPS.
-  static const double _maxAccuracyM = 40; // abaikan sinyal lemah
-  static const double _minStepM = 2; // abaikan getaran GPS kecil
-  static const double _maxSpeedMps = 25; // abaikan lompatan tak masuk akal
+  static const double _maxAccuracyM = 40;
+  static const double _minStepM = 2;
+  static const double _maxSpeedMps = 25;
 
   TrackingStatus _status = TrackingStatus.idle;
   ActivityType _type = ActivityType.run;
@@ -73,11 +63,9 @@ class TrackingProvider extends ChangeNotifier {
   LatLng? get current => _current;
   DateTime? get startedAt => _startedAt;
 
-  /// true saat sedang merekam atau dijeda.
   bool get isActive =>
       _status == TrackingStatus.recording || _status == TrackingStatus.paused;
 
-  /// Waktu bergerak dalam detik (tidak menghitung waktu jeda).
   int get elapsedS => _elapsedNow().inSeconds;
 
   Duration _elapsedNow() {
@@ -86,9 +74,6 @@ class TrackingProvider extends ChangeNotifier {
     return _accumulated + DateTime.now().difference(start);
   }
 
-  /// Dipanggil saat pengaturan berubah. Hanya perubahan pada nilai bawaan
-  /// yang berpengaruh, jadi mengubah target mingguan tidak menimpa pilihan
-  /// jenis aktivitas yang sedang dipakai di layar Rekam.
   void _onSettingsChanged() {
     final s = _settings;
     if (s == null) return;
@@ -126,8 +111,6 @@ class TrackingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Membaca posisi sekarang agar peta tertuju ke pengguna.
-  /// [ask] = true meminta izin lokasi bila belum diberikan.
   Future<void> locate({bool ask = false}) async {
     if (isActive) return;
 
@@ -150,7 +133,6 @@ class TrackingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Mulai merekam. Bila izin lokasi ditolak, [error] berisi alasannya.
   Future<void> start() async {
     if (_status != TrackingStatus.idle) return;
     _error = null;
@@ -173,7 +155,6 @@ class TrackingProvider extends ChangeNotifier {
       }
     }
 
-    // Pengguna mungkin menekan tombol dua kali selama menunggu izin.
     if (_status != TrackingStatus.idle) return;
 
     _route.clear();
@@ -214,7 +195,6 @@ class TrackingProvider extends ChangeNotifier {
       final lastTime = _lastTime;
 
       if (last == null || lastTime == null) {
-        // Titik pertama (atau pertama setelah jeda): hanya jadi titik awal.
         _lastCounted = p.latLng;
         _lastTime = p.time;
         _route.add(p.latLng);
@@ -257,7 +237,6 @@ class TrackingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Menghentikan perekaman. Data tetap disimpan untuk layar "Simpan".
   void finish() {
     if (!isActive) return;
     _accumulated = _elapsedNow();
@@ -267,7 +246,6 @@ class TrackingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Membuang rekaman dan kembali ke keadaan awal.
   void reset() {
     _stopSources();
     _status = TrackingStatus.idle;

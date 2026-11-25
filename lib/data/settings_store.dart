@@ -3,10 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/activity_type.dart';
 import '../models/app_settings.dart';
 
-/// Membaca dan menulis [AppSettings] lewat SharedPreferences.
-///
-/// Tiap pengaturan memakai satu kunci dengan tipe aslinya (teks, boolean,
-/// bilangan bulat). Di web, nilainya tersimpan di localStorage browser.
 class SettingsStore {
   SettingsStore([SharedPreferencesAsync? prefs])
     : _prefs = prefs ?? SharedPreferencesAsync();
@@ -17,8 +13,6 @@ class SettingsStore {
   static const String keySimulate = 'lariku_setting_simulate';
   static const String keyWeeklyGoalKm = 'lariku_setting_weekly_goal_km';
 
-  /// Membaca pengaturan. Nilai yang belum ada, atau bertipe salah karena
-  /// penyimpanan diubah manual, diganti nilai bawaan.
   Future<AppSettings> load() async {
     const defaults = AppSettings();
 
@@ -45,7 +39,6 @@ class SettingsStore {
   Future<void> saveWeeklyGoalKm(int km) =>
       _prefs.setInt(keyWeeklyGoalKm, AppSettings.clampGoal(km));
 
-  /// Menghapus semua pengaturan, sehingga [load] memberi nilai bawaan.
   Future<void> clear() async {
     await _prefs.remove(keyDefaultType);
     await _prefs.remove(keySimulate);

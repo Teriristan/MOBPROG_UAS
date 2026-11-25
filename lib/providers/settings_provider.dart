@@ -4,11 +4,6 @@ import '../data/settings_store.dart';
 import '../models/activity_type.dart';
 import '../models/app_settings.dart';
 
-/// Menyimpan [AppSettings] di memori, memberi tahu layar saat berubah, dan
-/// menulis perubahannya ke SharedPreferences lewat [SettingsStore].
-///
-/// Setiap perubahan langsung berlaku di layar. Fungsi pengubah mengembalikan
-/// pesan kesalahan bila perubahan tidak bisa disimpan (null berarti berhasil).
 class SettingsProvider extends ChangeNotifier {
   SettingsProvider({
     SettingsStore? store,
@@ -24,14 +19,10 @@ class SettingsProvider extends ChangeNotifier {
   bool get simulateByDefault => _settings.simulateByDefault;
   int get weeklyGoalKm => _settings.weeklyGoalKm;
 
-  /// Membaca pengaturan dari penyimpanan. Bila gagal dibaca, nilai yang
-  /// sekarang dipertahankan supaya aplikasi tetap bisa dibuka.
   Future<void> load() async {
     try {
       _settings = await _store.load();
-    } catch (_) {
-      // Pakai nilai bawaan.
-    }
+    } catch (_) {}
     notifyListeners();
   }
 
@@ -49,13 +40,11 @@ class SettingsProvider extends ChangeNotifier {
     );
   }
 
-  /// Target mingguan dijepit ke rentang yang diizinkan oleh [AppSettings].
   Future<String?> setWeeklyGoalKm(int km) {
     final next = _settings.copyWith(weeklyGoalKm: km);
     return _change(next, () => _store.saveWeeklyGoalKm(next.weeklyGoalKm));
   }
 
-  /// Mengembalikan semua pengaturan ke nilai bawaan.
   Future<String?> restoreDefaults() {
     return _change(const AppSettings(), _store.clear);
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/bootstrap_theme.dart';
 
-/// Tombol ala Bootstrap (btn btn-primary / btn-outline-primary / btn-sm).
 class BsButton extends StatelessWidget {
   const BsButton({
     super.key,

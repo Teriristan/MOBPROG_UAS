@@ -5,11 +5,6 @@ import 'package:latlong2/latlong.dart' show LatLng;
 import '../core/constants.dart';
 import '../core/theme/bootstrap_theme.dart';
 
-/// Peta OpenStreetMap yang menampilkan rute dan posisi saat ini.
-///
-/// - [followCurrent]: kamera mengikuti [current] (dipakai saat merekam).
-/// - [fitRoute]: kamera langsung pas ke seluruh rute (dipakai di detail).
-/// - [showEndpoints]: tampilkan penanda awal (hijau) dan akhir (merah).
 class RouteMap extends StatefulWidget {
   const RouteMap({
     super.key,
@@ -44,8 +39,6 @@ class _RouteMapState extends State<RouteMap> {
 
     final cur = widget.current;
     if (widget.followCurrent && cur != null && cur != oldWidget.current) {
-      // Digerakkan setelah frame selesai supaya tidak memanggil setState
-      // di tengah proses build.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted || !_ready) return;
         _controller.move(cur, _controller.camera.zoom);

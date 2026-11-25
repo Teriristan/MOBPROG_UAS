@@ -10,8 +10,6 @@ import '../../widgets/empty_state.dart';
 import '../../widgets/user_avatar.dart';
 import 'profile_screen.dart';
 
-/// Daftar pengikut (atau yang diikuti) seorang pengguna.
-/// Ketuk salah satu untuk membuka profilnya.
 class FollowListScreen extends StatefulWidget {
   const FollowListScreen({
     super.key,
@@ -20,8 +18,6 @@ class FollowListScreen extends StatefulWidget {
   });
 
   final String uid;
-
-  /// true = daftar pengikut, false = daftar yang diikuti.
   final bool followers;
 
   @override
@@ -47,15 +43,16 @@ class _FollowListScreenState extends State<FollowListScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final users = <AppUser>[
-            for (final id in ids)
-              if (LocalDb.instance.userById(id) != null)
-                LocalDb.instance.userById(id)!,
-          ]..sort(
-              (a, b) => a.displayName.toLowerCase().compareTo(
-                b.displayName.toLowerCase(),
-              ),
-            );
+          final users =
+              <AppUser>[
+                for (final id in ids)
+                  if (LocalDb.instance.userById(id) != null)
+                    LocalDb.instance.userById(id)!,
+              ]..sort(
+                (a, b) => a.displayName.toLowerCase().compareTo(
+                  b.displayName.toLowerCase(),
+                ),
+              );
 
           if (users.isEmpty) {
             return EmptyState(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/bootstrap_theme.dart';
 
-/// Tampilan saat daftar kosong: ikon besar, judul, dan keterangan.
 class EmptyState extends StatelessWidget {
   const EmptyState({
     super.key,

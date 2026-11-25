@@ -1,4 +1,3 @@
-/// Profil pengguna (disimpan di localStorage pada kunci `lariku_users`).
 class AppUser {
   const AppUser({
     required this.uid,
@@ -11,8 +10,6 @@ class AppUser {
   final String uid;
   final String displayName;
   final String bio;
-
-  /// Foto profil (JPEG/PNG) dalam bentuk teks base64. Null = belum ada foto.
   final String? photo;
   final DateTime? createdAt;
 

@@ -6,7 +6,6 @@ import '../models/backup_summary.dart';
 import 'file_storage.dart';
 import 'file_storage_platform.dart';
 
-/// Berkas yang baru disimpan: nama dan lokasi lengkapnya.
 class SavedFile {
   const SavedFile({required this.name, required this.path});
 
@@ -14,10 +13,6 @@ class SavedFile {
   final String path;
 }
 
-/// Cadangan data (JSON) dan ekspor rute (GPX).
-///
-/// Teks cadangan/GPX dibuat di sini, lalu bisa disimpan sebagai berkas di
-/// folder aplikasi ([FileStorage]) atau disalin ke papan klip oleh layar.
 class ExportService {
   ExportService({LocalDb? db, FileStorage? storage, DateTime Function()? now})
     : _db = db ?? LocalDb.instance,
@@ -31,18 +26,12 @@ class ExportService {
   static const String backupPrefix = 'lariku_cadangan_';
   static const String backupSuffix = '.json';
 
-  /// false di web: berkas tidak bisa disimpan, hanya bisa disalin.
   bool get canSaveFiles => _storage.isSupported;
 
-  /// Folder tempat berkas disimpan.
   Future<String> folderPath() => _storage.folderPath();
 
-  // ---- Cadangan ----------------------------------------------------------
-
-  /// Seluruh data sebagai teks JSON.
   String buildBackup() => _db.exportJson();
 
-  /// `lariku_cadangan_20261110_184400.json`
   String backupFileName() {
     return '$backupPrefix${_stamp(_now(), withSeconds: true)}$backupSuffix';
   }
@@ -53,7 +42,6 @@ class ExportService {
     return SavedFile(name: name, path: path);
   }
 
-  /// Cadangan yang ada di folder aplikasi, yang terbaru di atas.
   Future<List<StoredFile>> listBackups() {
     return _storage.list(prefix: backupPrefix, suffix: backupSuffix);
   }
@@ -68,11 +56,8 @@ class ExportService {
     await _storage.delete(name);
   }
 
-  /// Memeriksa isi cadangan tanpa mengubah data. Melempar [AppException]
-  /// bila cadangan tidak valid.
   BackupSummary inspectBackup(String text) => LocalDb.inspectBackup(text);
 
-  /// Mengganti semua data dengan isi cadangan, lalu keluar dari akun.
   Future<BackupSummary> restoreBackup(String text) => _db.importJson(text);
 
   void _requireBackupName(String name) {
@@ -81,12 +66,8 @@ class ExportService {
     }
   }
 
-  // ---- GPX ---------------------------------------------------------------
-
-  /// Rute [activity] sebagai teks GPX.
+  //GPX
   String buildGpx(Activity activity) => GpxBuilder.build(activity);
-
-  /// `lariku_run_20261103_0630.gpx`
   String gpxFileName(Activity activity) {
     return 'lariku_${activity.type.name}_${_stamp(activity.startTime)}.gpx';
   }
@@ -98,8 +79,7 @@ class ExportService {
     return SavedFile(name: name, path: path);
   }
 
-  // ---- Bantuan -----------------------------------------------------------
-
+  //Help
   static String _stamp(DateTime d, {bool withSeconds = false}) {
     String two(int n) => n.toString().padLeft(2, '0');
     final date =

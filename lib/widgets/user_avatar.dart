@@ -6,20 +6,12 @@ import 'package:flutter/material.dart';
 import '../core/theme/bootstrap_theme.dart';
 import '../data/local_db.dart';
 
-/// Avatar bulat. Bila [uid] diberikan dan pengguna itu punya foto profil,
-/// foto ditampilkan. Selain itu, tampil huruf pertama nama.
 class UserAvatar extends StatelessWidget {
-  const UserAvatar({
-    super.key,
-    required this.name,
-    this.radius = 20,
-    this.uid,
-  });
+  const UserAvatar({super.key, required this.name, this.radius = 20, this.uid});
 
   final String name;
   final double radius;
 
-  /// ID pengguna, untuk mengambil foto profilnya. Boleh kosong.
   final String? uid;
 
   static const List<Color> _palette = [
@@ -31,7 +23,6 @@ class UserAvatar extends StatelessWidget {
     BsColors.purple,
   ];
 
-  // Hasil decode disimpan supaya foto tidak di-decode ulang tiap build.
   static final Map<String, Uint8List> _decoded = <String, Uint8List>{};
 
   static Uint8List? _decode(String? base64Text) {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/bootstrap_theme.dart';
 
-/// Lencana kecil ala Bootstrap (badge bg-primary, rounded-pill).
 class BsBadge extends StatelessWidget {
   const BsBadge({
     super.key,

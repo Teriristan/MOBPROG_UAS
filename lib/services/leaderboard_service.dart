@@ -2,7 +2,6 @@ import '../data/local_db.dart';
 import '../models/activity.dart';
 import '../models/activity_type.dart';
 
-/// Satu baris papan peringkat.
 class LeaderboardEntry {
   LeaderboardEntry({required this.userId, required this.userName});
 
@@ -13,14 +12,10 @@ class LeaderboardEntry {
   int count = 0;
 }
 
-/// Papan peringkat jarak. Data diambil per periode, lalu dijumlah per
-/// pengguna di aplikasi.
 class LeaderboardService {
   LeaderboardService({LocalDb? db}) : _db = db ?? LocalDb.instance;
 
   final LocalDb _db;
-
-  /// Semua aktivitas sejak [since].
   Stream<List<Activity>> watchSince(DateTime since) {
     return _db.watch<List<Activity>>(
       () => _db
@@ -30,8 +25,6 @@ class LeaderboardService {
     );
   }
 
-  /// Menjumlah jarak per pengguna, urut dari yang terjauh.
-  /// [type] membatasi jenis aktivitas, [onlyUsers] membatasi pengguna.
   static List<LeaderboardEntry> rank(
     List<Activity> activities, {
     ActivityType? type,

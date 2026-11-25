@@ -8,8 +8,6 @@ import 'providers/settings_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Format tanggal berbahasa Indonesia (dipakai oleh Fmt di formatters.dart).
   await initializeDateFormatting('id_ID');
 
   try {
@@ -21,8 +19,6 @@ Future<void> main() async {
     return;
   }
 
-  // Pengaturan (SharedPreferences). Bila gagal dibaca, nilai bawaan dipakai
-  // supaya aplikasi tetap bisa dibuka.
   final settings = SettingsProvider();
   await settings.load();
 
