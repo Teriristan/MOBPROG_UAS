@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../core/theme/bootstrap_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../models/activity.dart';
@@ -22,9 +21,11 @@ import '../settings/settings_screen.dart';
 import '../../models/stats_period.dart';
 import '../../widgets/period_filter_bar.dart';
 import '../../widgets/type_filter_chips.dart';
+import '../../services/stats_insights.dart';
+import '../../widgets/personal_records_card.dart';
+import '../../widgets/streak_card.dart';
 
-/// Statistik pribadi: ringkasan minggu ini, grafik 8 minggu, total, dan
-/// riwayat seluruh aktivitas.
+// Statistik pribadi: ringkasan minggu ini, grafik 8 minggu, total, dan riwayat seluruh aktivitas.
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
 
@@ -86,6 +87,11 @@ class _StatsScreenState extends State<StatsScreen> {
     final list = StatsFilter.apply(all, period: _period, type: _type);
     final s = StatsSummary.from(list);
     final longest = s.longest;
+    final insights = StatsInsights.from(list);
+    // Streak gak ikut filter periode.
+    final streak = StatsInsights.from(
+      StatsFilter.apply(all, period: StatsPeriod.all, type: _type),
+    );
 
     return ListView(
       padding: const EdgeInsets.all(12),
@@ -141,6 +147,11 @@ class _StatsScreenState extends State<StatsScreen> {
             const SizedBox(height: 12),
             _GoalCard(summary: s, goalKm: goalKm),
           ],
+          const SizedBox(height: 12),
+          StreakCard(
+            current: streak.currentStreak,
+            longest: streak.longestStreak,
+          ),
           const SizedBox(height: 16),
           const _SectionTitle('Jarak 8 minggu terakhir (km)'),
           BsCard(child: WeeklyBarChart(weeks: s.weeks)),
@@ -174,11 +185,9 @@ class _StatsScreenState extends State<StatsScreen> {
               ],
             ),
           ),
-          if (longest != null) ...[
-            const SizedBox(height: 16),
-            const _SectionTitle('Rekor jarak terjauh'),
-            _HistoryTile(activity: longest),
-          ],
+          const SizedBox(height: 16),
+          const _SectionTitle('Rekor pribadi'),
+          PersonalRecordsCard(longest: longest, insights: insights),
           const SizedBox(height: 16),
           _SectionTitle('Riwayat (${list.length})'),
           for (final a in list) _HistoryTile(activity: a),
