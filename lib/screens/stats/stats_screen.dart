@@ -24,6 +24,7 @@ import '../../widgets/type_filter_chips.dart';
 import '../../services/stats_insights.dart';
 import '../../widgets/personal_records_card.dart';
 import '../../widgets/streak_card.dart';
+import '../../widgets/weekday_bar_chart.dart';
 
 // Statistik pribadi: ringkasan minggu ini, grafik 8 minggu, total, dan riwayat seluruh aktivitas.
 class StatsScreen extends StatefulWidget {
@@ -155,6 +156,9 @@ class _StatsScreenState extends State<StatsScreen> {
           const SizedBox(height: 16),
           const _SectionTitle('Jarak 8 minggu terakhir (km)'),
           BsCard(child: WeeklyBarChart(weeks: s.weeks)),
+          const SizedBox(height: 16),
+          const _SectionTitle('Aktivitas per hari'),
+          BsCard(child: WeekdayBarChart(counts: insights.perWeekday)),
           const SizedBox(height: 16),
           _SectionTitle(_period.totalTitle),
           BsCard(
