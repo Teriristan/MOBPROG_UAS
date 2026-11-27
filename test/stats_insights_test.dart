@@ -42,6 +42,7 @@ void main() {
       expect(i.perWeekday, List<int>.filled(7, 0));
       expect(i.longestDuration, isNull);
       expect(i.fastestByType, isEmpty);
+      expect(i.distanceByType, isEmpty);
     });
 
     test('streak berturut-turut sampai hari ini', () {
@@ -102,6 +103,19 @@ void main() {
       expect(i.fastestByType[ActivityType.run]?.id, 'fast');
       expect(i.fastestByType[ActivityType.ride]?.id, 'ride');
       expect(i.fastestByType.containsKey(ActivityType.walk), isFalse);
+    });
+
+    test('jarak per jenis', () {
+      final list = [
+        _act('a', ActivityType.run, 1000, 300, DateTime(2026, 11, 22)),
+        _act('b', ActivityType.run, 2000, 600, DateTime(2026, 11, 23)),
+        _act('c', ActivityType.ride, 5000, 900, DateTime(2026, 11, 24)),
+      ];
+      final i = StatsInsights.from(list, now: now);
+
+      expect(i.distanceByType[ActivityType.run], 3000);
+      expect(i.distanceByType[ActivityType.ride], 5000);
+      expect(i.distanceByType.containsKey(ActivityType.walk), isFalse);
     });
   });
 

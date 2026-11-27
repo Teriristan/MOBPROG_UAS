@@ -25,6 +25,7 @@ import '../../services/stats_insights.dart';
 import '../../widgets/personal_records_card.dart';
 import '../../widgets/streak_card.dart';
 import '../../widgets/weekday_bar_chart.dart';
+import '../../widgets/type_donut_chart.dart';
 
 // Statistik pribadi: ringkasan minggu ini, grafik 8 minggu, total, dan riwayat seluruh aktivitas.
 class StatsScreen extends StatefulWidget {
@@ -159,6 +160,13 @@ class _StatsScreenState extends State<StatsScreen> {
           const SizedBox(height: 16),
           const _SectionTitle('Aktivitas per hari'),
           BsCard(child: WeekdayBarChart(counts: insights.perWeekday)),
+          if (_type == null) ...[
+            const SizedBox(height: 16),
+            const _SectionTitle('Proporsi jarak per jenis'),
+            BsCard(
+              child: TypeDonutChart(distanceByType: insights.distanceByType),
+            ),
+          ],
           const SizedBox(height: 16),
           _SectionTitle(_period.totalTitle),
           BsCard(
